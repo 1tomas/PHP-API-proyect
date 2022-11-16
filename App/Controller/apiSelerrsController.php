@@ -6,18 +6,24 @@ class apiSellersController {
     private $model;
     private $view;
 
-   function __construct(){
+    public function __construct(){
         $this->model = new sellersModel();
         $this->view = new apiView();
     }
 
 
-    function getAll(){
-        $sellers = $this->model->getSellers();
+    public function getAll(){
+        if(isset($_GET['order'])&&$_GET['order']=="asc"){
+            $sellers = $this->model->getSellersOrderAsc();
+        }else if(isset($_GET['order'])&&$_GET['order']=="desc"){
+            $sellers = $this->model->getSellersOrderDesc();
+        }else{
+            $sellers = $this->model->getSellers();
+        }
         $this->view->response($sellers, 200);
     }
 
-    function getOne($params = null){
+    public function getOne($params = null){
         $id = $params[":ID"];
         $seller = $this->model->getSeller($id);
         if($seller){
@@ -27,7 +33,7 @@ class apiSellersController {
         }
        
     }
-    function remove($params = null){
+    public function remove($params = null){
         $id = $params[":ID"];
         $seller = $this->model->getSeller($id);
 
@@ -38,7 +44,7 @@ class apiSellersController {
             $this->view->response("Error $id no existe", 404);
         }
     }
-    function insert($params = null){
+    public function insert($params = null){
         $body = $this->getBody();
         $id = $this->model->insertSeller($body->id_vendedor, $body->nombre, $body->legajo);
         if($id != 0){
@@ -55,7 +61,7 @@ class apiSellersController {
         return json_decode($bodyString);
     }
 
-    function update($params = null){
+    public function update($params = null){
         $id = $params[":ID"];
         $body = $this->getBody();
         $seller = $this->model->getSeller($id);

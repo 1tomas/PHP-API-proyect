@@ -41,4 +41,17 @@ class sellersModel{
         $query = $this->db->prepare("UPDATE vendedor SET nombre=?, legajo=? WHERE id_vendedor=?");
         $query->execute([ $name, $file, $id]); 
     }
+
+    public function getSellersOrderAsc(){
+        $query = $this->db->prepare("SELECT a.*,b.* FROM vendedor a INNER JOIN producto b ON a.id_vendedor = b.id_vendedor_fk ORDER BY a.nombre ASC;");
+        $query->execute();
+        $products = $query->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+    }
+    public function getSellersOrderDesc(){
+        $query = $this->db->prepare("SELECT a.*,b.* FROM vendedor a INNER JOIN producto b ON a.id_vendedor = b.id_vendedor_fk ORDER BY a.nombre DESC;");
+        $query->execute();
+        $products = $query->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+    }
 }

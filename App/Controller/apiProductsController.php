@@ -6,18 +6,24 @@ class apiProductsController{
     private $model;
     private $view;
 
-   function __construct(){
+    public function __construct(){
         $this->model = new productsModel();
         $this->view = new apiView();
     }
 
 
-    function getAll(){
-        $products = $this->model->getProducts();
+    public function getAll(){
+        if(isset($_GET['order'])&&$_GET['order']=="asc"){
+            $products = $this->model->getProductsOrderAsc();
+        }else if(isset($_GET['order'])&&$_GET['order']=="desc"){
+            $products = $this->model->getProductsOrderDesc();
+        }else{
+            $products = $this->model->getProducts();
+        }
         $this->view->response($products, 200);
     }
 
-    function getOne($params = null){
+    public function getOne($params = null){
         $id = $params[":ID"];
         $product = $this->model->getProduct($id);
         if($product){
@@ -27,7 +33,7 @@ class apiProductsController{
         }
        
     }
-    function remove($params = null){
+    public function remove($params = null){
         $id = $params[":ID"];
         $product = $this->model->getProduct($id);
 
@@ -38,7 +44,7 @@ class apiProductsController{
             $this->view->response("Error $id no existe", 404);
         }
     }
-    function insert($params = null){
+    public function insert($params = null){
         $body = $this->getBody();
         $id = $this->model->insertProduct($body->id_vendedor_fk, $body->tipo, $body->descripcion, $body->precio);
         if($id != 0){
@@ -54,7 +60,7 @@ class apiProductsController{
         return json_decode($bodyString);
     }
 
-    function update($params = null){
+    public function update($params = null){
         $id = $params[":ID"];
         $body = $this->getBody();
         $product = $this->model->getProduct($id);
