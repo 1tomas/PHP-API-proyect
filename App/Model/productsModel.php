@@ -44,6 +44,19 @@ class productsModel{
         $query->execute([$sellerFk, $type ,$description, $price, $id]); 
     }
 
+    public function getProductsOrderAsc(){
+        $query = $this->db->prepare("SELECT a.*,b.* FROM producto a INNER JOIN vendedor b ON a.id_vendedor_fk = b.id_vendedor ORDER BY a.tipo ASC;");
+        $query->execute();
+        $products = $query->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+    }
+    public function getProductsOrderDesc(){
+        $query = $this->db->prepare("SELECT a.*,b.* FROM producto a INNER JOIN vendedor b ON a.id_vendedor_fk = b.id_vendedor ORDER BY a.tipo DESC;");
+        $query->execute();
+        $products = $query->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+    }
+
     
 
 }

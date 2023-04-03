@@ -67,4 +67,25 @@ class apiUsersController{
         }
     }
 }
- 
+ /*        if(isset($obrasocial)){
+    if(!$sort==null){
+        // compruebo que el get obtenido sea correcto
+        if ((in_array($sort,$this->model->getColumns())&&(($order==null)||($order=='ASC')||($order=='DESC')))) {
+            $pacientes = $this->model->filterOrderByOs($obrasocial, $sort, $order);
+            if(empty($pacientes)){
+            $this->view->response("Obra social no existe", 400);
+            }else{
+            $this->parametros($pacientes, $page, $limit);
+            }
+        }else{
+            $this->view->response("Parametros GET incorrectos", 400);
+        }
+    }else{
+        $pacientes = $this->model->filterByOs($obrasocial);
+        if(empty($pacientes)){
+            $this->view->response("Obra social no existe", 400);
+        }else{
+            $this->parametros($pacientes, $page, $limit);
+        }
+    }
+}
